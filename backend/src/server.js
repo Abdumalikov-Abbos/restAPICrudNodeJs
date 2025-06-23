@@ -1,10 +1,22 @@
 // import express from 'express'
 import express from "express";
 import notesRoutes from "./routes/notesRoutes.js";
-
+import { connectDb } from "./config/db.js";
+import dotenv from "dotenv";
+import rateLimiter from "./middleware/rateLimiter.js";
+dotenv.config();
 const app = express();
+
+app.use(express.json()); //this middleware will parse JSON bodies: Req.body
+app.use(rateLimiter);
+// app.use((req, res, next) =>{
+//     console.log(`Req method is ${req.method} Req url is ${req.url}`);
+//     next();
+// })
 
 app.use("/api/notes", notesRoutes);
 
-const port = 5001 || process.env.PORT;
-app.listen(port, () => console.log("Listening on port 5001"));
+const PORT = 5001 || process.env.PORT;
+connectDb().then(() => {
+  app.listen(PORT, () => console.log("Listening on port 5001"));
+});
