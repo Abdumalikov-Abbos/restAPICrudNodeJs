@@ -4,13 +4,13 @@ import {PenSquareIcon, Trash2Icon } from 'lucide-react'
 import {  api } from '../lib/axios'
 import toast from 'react-hot-toast'
 import { formatDate } from '../lib/utils'
-const NoteCard = ({note}) => {
+const NoteCard = ({note, setNotes}) => {
   const handleDelete = async (e, id) => {
    e.preventDefault()
    if(!window.confirm("Are you sure you want to delete this note?")) return
    try{
     await api.delete(`/notes/${id}`)
-    
+    setNotes((prev) => prev.filter((note) => note._id !== id)) /// get rid of the deleted note
     toast.success("Note deleted successfully")
     window.location.reload()
    }catch(err){
