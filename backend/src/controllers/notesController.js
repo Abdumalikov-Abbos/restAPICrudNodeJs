@@ -42,7 +42,7 @@ export async function updateNote(req, res) {
       { title, content },
       {
         new: true,
-      }
+      },
     );
     if (!updatedNote) {
       return res.status(404).json(updatedNote);
